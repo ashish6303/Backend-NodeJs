@@ -1,10 +1,12 @@
 
 // This is going to use the promise syntax
-const asyncHandlers = (requestHandler) => {
-    (req, res, next) => {
+const asyncHandler = (requestHandler) => {
+    return (req, res, next) => {
         Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
     }
 }
+
+export { asyncHandler }
 
 // export {asyncHandlers}
 
