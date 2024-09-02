@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
     ) {
         throw new ApiError(400, "All fields are required");
     }
-
+ 
     // Here we are using await because it might take sometime 
     const existedUser =await User.findOne({
         $or : [{userName}, {email}]
@@ -37,7 +37,9 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     const avatarLocalPath =  await req.files?.avatar[0]?.path ; 
-    const coverImageLocalPath = await req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath = await req.files?.coverImage[0]?.path;
+    const coverImageLocalPath = await req.files?.coverImage?.[0]?.path ?? null;
+
 
     if(!avatarLocalPath){
         throw new ApiError(400, "Avatar file is required 1")
@@ -66,6 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if(!createdUser) throw new ApiError(500, "something went wrong while registering user ")
 
+    // This is use for the get the value instead of whole string
     console.log("userId: ",  createdUser._id.toString())
     
     return res.status(201).json(
